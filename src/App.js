@@ -1,22 +1,35 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
-
-const clickHandler = () => console.log('CLICKED')
+import Editor from './Editor'
 
 class App extends Component {
+  state = {counter: 0}
+
+  increment = () => {
+    this.setState({counter: this.state.counter + 1})
+  }
+  
+  decrement = () => {
+    this.setState({counter: this.state.counter - 1})
+  }
+
   render() {
     return (
       <div className="App">
         <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React</h2>
+          <h2>Automark</h2>
+          <div>
+            <div>
+              Counter value is <b>{this.state.counter}</b> 
+            </div>
+            <div style={{margin: 5}}>
+              <button onClick={this.increment}>+</button>
+              <button onClick={this.decrement}>-</button>
+            </div>
+          </div>
         </div>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-        <div>
-          <button onClick={clickHandler}>Click Me</button>
+        <div style={{margin: 5}}>
+          <Editor />
         </div>
       </div>
     );

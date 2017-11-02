@@ -23,14 +23,36 @@
 
     <script>
       
-      proxifyAddEventListener(myProxy)
+      proxifyAddEventListener(automarkProxy)
       listenAllDocumentEvents()
 
-      function myProxy(event){
-        if(event.type === 'click'){
+      var automarkListeners = []
+      function addAutomarkEventListener(listener){
+        console.log('Add listener')
+        automarkListeners.push(listener)
+      }
+      function removeAutomarkEventListener(listener){
+        var index = automarkListeners.indexOf(listener)
+        if (index > -1) {
+          automarkListeners.splice(index, 1);
+          console.log('Remove listener')
+        }
+        else{
+          console.log('Listener not found')
+        }
+      }
 
-          //Get the xpath
-          var xpath = getPathTo(event.target)
+      function automarkProxy(event){
+        
+        if(event.type === 'click'){ 
+          var xpath = getPathTo(event.target) 
+          automarkListeners.map(function(listener){
+            listener(event, xpath)
+          })
+        }
+
+        /*if(event.type === 'click'){
+
           console.log('CLICK', xpath)
 
           //Find the element from the xpath
@@ -48,7 +70,7 @@
         }
         else if(event.type === 'mousedown'){
           console.log('MOUSE DOWN!')
-        }
+        }*/
       }
 
       function proxifyAddEventListener(listenerProxy){
