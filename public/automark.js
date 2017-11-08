@@ -39,31 +39,11 @@ function automarkProxy (event) {
   if (event.type === 'click') {
     var xpath = getPathTo(event.target)
     console.log('[AUTOMARK]', 'I just seen a click event on', event.target, event)
+    console.log('[AUTOMARK]', 'Gotta tell it to', automark.listeners.length, 'listeners')
     automark.listeners.forEach(function (listener) {
       listener(event, xpath)
     })
   }
-
-  /* if(event.type === 'click'){
-
-    console.log('CLICK', xpath)
-
-    //Find the element from the xpath
-    var element = document.evaluate( xpath ,document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null ).singleNodeValue
-    if (!element) return
-    console.log('FOUND', element)
-
-    //Show click on the element
-    eventFire(element, 'mousedown')
-
-    var rect = element.getBoundingClientRect();
-    var x = rect.left + (rect.right - rect.left) / 2
-    var y = rect.top + (rect.bottom - rect.top) /2
-    showClick(x, y)
-  }
-  else if(event.type === 'mousedown'){
-    console.log('MOUSE DOWN!')
-  } */
 }
 
 function proxifyAddEventListener (callback) {
@@ -79,7 +59,9 @@ function proxifyAddEventListener (callback) {
     var listenerToAdd = arguments[1]
     var listenerProxy = function () {
       callback.apply(this, arguments)
-      listenerToAdd.apply(this, arguments)
+      if (!arguments[0].defaultPrevented) {
+        listenerToAdd.apply(this, arguments)
+      }
     }
     listenerToAdd.proxy = listenerProxy
     argumentsEx[1] = listenerProxy
@@ -162,30 +144,11 @@ function listenAllDocumentEvents () {
     WheelEvent: 'wheel'
   }
 
-  var RecentlyLoggedDOMEventTypes = {}
-
-  for (DOMEvent in DOMEvents) {
+  for (var DOMEvent in DOMEvents) {
     var DOMEventTypes = DOMEvents[DOMEvent].split(' ')
 
     DOMEventTypes.filter(function (DOMEventType) {
-      var DOMEventCategory = DOMEvent + ' ' + DOMEventType
-      document.addEventListener(DOMEventType, function (e) {
-        // if(RecentlyLoggedDOMEventTypes[DOMEventCategory]) return;
-        // RecentlyLoggedDOMEventTypes[DOMEventCategory] = true;
-        // setTimeout(function(){ RecentlyLoggedDOMEventTypes[DOMEventCategory] = false }, 5000);
-        // var isActive = e.target==document.activeElement;
-        // if(isActive) {
-        //   console.info(DOMEventCategory,
-        //     ' target=', e.target,
-        //     ' active=', document.activeElement,
-        //     ' isActive=', true );
-        // } else {
-        //   console.log(DOMEventCategory,
-        //     ' target=', e.target,
-        //     ' active=', document.activeElement,
-        //     ' isActive=', false );
-        // }
-      }, true)
+      document.addEventListener(DOMEventType, function () {}, true)
     })
   }
 }
@@ -206,38 +169,4 @@ function getPathTo (element) {
       ix++
     }
   }
-}
-
-function eventFire (el, etype) {
-  if (el.fireEvent) {
-    el.fireEvent('on' + etype)
-  } else {
-    var evObj = document.createEvent('Events')
-    evObj.initEvent(etype, true, false)
-    el.dispatchEvent(evObj)
-  }
-}
-
-function showClick (x, y) {
-  var clickSignal = document.createElement('div')
-  clickSignal.style.zIndex = 2000
-  clickSignal.style.border = '3px solid red'
-  clickSignal.style['border-radius'] = '50%' // Chrome
-  clickSignal.style.borderRadius = '50%'     // Mozilla
-  clickSignal.style.width = '40px'
-  clickSignal.style.height = '40px'
-  clickSignal.style['box-sizing'] = 'border-box'
-  clickSignal.style.position = 'absolute'
-  clickSignal.style.webkitTransition = 'opacity 1s ease-out'
-  clickSignal.style.mozTransition = 'opacity 1s ease-out'
-  clickSignal.style.transition = 'opacity 1s ease-out'
-  clickSignal.style.left = (x - 20) + 'px'
-  clickSignal.style.top = (y - 20) + 'px'
-  var element = document.body.appendChild(clickSignal)
-  setTimeout(function () {
-    document.body.removeChild(element)
-  }, 1000)
-  setTimeout(function () {
-    element.style.opacity = 0
-  }, 50)
 }
