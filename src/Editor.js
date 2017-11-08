@@ -1,3 +1,4 @@
+/* globals automark */
 import React, {Component} from 'react'
 
 class Editor extends Component {
@@ -5,13 +6,15 @@ class Editor extends Component {
     element: 'No element'
   }
 
-  activateSelectMode = () => {
-    console.log('SHOULD NOT BE CALLED TWICE') //TODO
-    window.addAutomarkEventListener(this.onAutomarkEvent)
+  activateSelectMode = (e) => {
+    e.preventDefault()
+    console.log('[EDITOR]', 'Activate select mode') 
+    automark.addEventListener(this.onAutomarkEvent)
   }
 
   onAutomarkEvent = (event, xpath) =>{
-    window.removeAutomarkEventListener(this.onAutomarkEvent)
+    console.log('[EDITOR]', 'Deactivate select mode') 
+    automark.removeEventListener(this.onAutomarkEvent)
     this.setState({
       element: xpath
     })

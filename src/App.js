@@ -5,11 +5,13 @@ import Editor from './Editor'
 class App extends Component {
   state = {counter: 0}
 
-  increment = () => {
+  increment = (e) => {
+    e.preventDefault()
     this.setState({counter: this.state.counter + 1})
   }
   
-  decrement = () => {
+  decrement = (e) => {
+    e.preventDefault()
     this.setState({counter: this.state.counter - 1})
   }
 
