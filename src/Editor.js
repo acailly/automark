@@ -5,7 +5,7 @@ import fromXPath from './actions/fromXPath'
 
 class Editor extends Component {
   state={
-    elementXPath: 'No element'
+    steps: []
   }
 
   activateSelectMode = (event) => {
@@ -19,25 +19,39 @@ class Editor extends Component {
     console.log('[EDITOR]', 'Deactivate select mode') 
     automark.removeEventListener(this.onAutomarkEvent)
     this.setState({
-      elementXPath: xpath
+      steps: [...this.state.steps, xpath]
     })
   }
 
   replay = () => {
-    var element = fromXPath(this.state.elementXPath)
-    if (!element) return
+    this.state.steps.reduce((promise, step) => {
+      const element = fromXPath(step)
+      if (!element) return
 
-    click(element)
+      return promise
+        .then(() => new Promise(resolve => setTimeout(resolve, 1000)))
+        .then(() => click(element))
+    }, Promise.resolve())
   }
 
   render () {
+    const renderedSteps = this.state.steps.map(step => {
+      return (
+        <tr>
+          <td>
+            {step}
+          </td>
+        </tr>
+      )
+    })
+
     return (
       <div>
         <button onClick={this.activateSelectMode}>Select an element</button>
-        <div>
-            You clicked on <b>{this.state.elementXPath}</b>
-        </div>
-        <button onClick={this.replay}>Click on that element</button>
+        <table>
+            {renderedSteps}
+        </table>
+        <button onClick={this.replay}>Click on these elements</button>
       </div>
     )
   }
