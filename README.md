@@ -13,3 +13,34 @@
 - Let user save its actions in a javascript bookmark
 - Let user add a `type` action to set the value of the textfield
 - Consider showing the editor in a separate window, maybe using React portals ? https://hackernoon.com/using-a-react-16-portal-to-do-something-cool-2a2d627b0202
+
+
+## List of Webdriverio actions used in a real project
+
+addValue
+chooseFile
+clearElement
+click
+debug
+getElementSize
+getText
+getTitle
+getUrl
+getValue
+isSelected
+isVisible
+keys
+pause
+saveScreenshot
+setValue
+setViewportSize
+selectByValue
+selectByVisibleText
+url
+waitForVisible
+waitForExist
+waitUntil
+windowHandleMaximize
+windowHandleSize
+
+
