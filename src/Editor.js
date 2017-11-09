@@ -19,14 +19,14 @@ class Editor extends Component {
     console.log('[EDITOR]', 'Deactivate select mode') 
     automark.removeEventListener(this.onAutomarkEvent)
     this.setState({
-      steps: [...this.state.steps, xpath]
+      steps: [...this.state.steps, {element: xpath, action: 'click'}]
     })
   }
 
   replay = () => {
     this.state.steps.reduce((promise, step) => {
-      const element = fromXPath(step)
-      if (!element) return
+      const element = fromXPath(step.element)
+      if (!element) return promise
 
       return promise
         .then(() => new Promise(resolve => setTimeout(resolve, 1000)))
@@ -37,20 +37,18 @@ class Editor extends Component {
   render () {
     const renderedSteps = this.state.steps.map(step => {
       return (
-        <tr>
-          <td>
-            {step}
-          </td>
-        </tr>
+        <div>
+          <b>Action:</b> {step.action} <b>Element:</b> {step.element}
+        </div>
       )
     })
 
     return (
       <div>
         <button onClick={this.activateSelectMode}>Select an element</button>
-        <table>
+        <div>
             {renderedSteps}
-        </table>
+        </div>
         <button onClick={this.replay}>Click on these elements</button>
       </div>
     )
