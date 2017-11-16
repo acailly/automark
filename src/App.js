@@ -28,6 +28,9 @@ class App extends Component {
               <button onClick={this.increment}>+</button>
               <button onClick={this.decrement}>-</button>
             </div>
+            <div style={{margin: 5}}>
+              <input type='text' />
+            </div>
           </div>
         </div>
         <div style={{margin: 5}}>

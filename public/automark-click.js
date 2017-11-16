@@ -1,10 +1,39 @@
-export default (element) => {
-  var rect = element.getBoundingClientRect()
+/* globals XPathResult automark */
+
+registerClickAction()
+
+function registerClickAction () {
+  automark.actions['click'] = {
+    type: 'click',
+    params: {
+      target: 'element'
+    },
+    getDescription: function (params) {
+      return 'I click on ' + params.target
+    },
+    execute: automarkClickExecute
+  }
+}
+
+function automarkClickExecute (params) {
+  var domElement = fromXPath(params.target)
+  if (!domElement) return
+
+  var rect = domElement.getBoundingClientRect()
   var x = rect.left + ((rect.right - rect.left) / 2)
   var y = rect.top + ((rect.bottom - rect.top) / 2)
   showClick(x, y)
 
-  element.click()
+  domElement.click()
+}
+
+function fromXPath (xpath) {
+  try {
+    return document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue
+  } catch (e) {
+    console.error('Invalid xpath', xpath)
+  }
+  return null
 }
 
 function showClick (x, y) {
