@@ -25,8 +25,7 @@ class ElementParam extends Component {
   render () {
     return (
       <div>
-        {this.state.xpath || 'Undefined'}
-        <button onClick={this.activateSelectMode}>Select an element</button>
+        <button onClick={this.activateSelectMode}>{this.state.xpath || 'Select an element'}</button>
       </div>
     )
   }

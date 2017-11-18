@@ -1,5 +1,6 @@
 /* globals automark */
 import React, {Component} from 'react'
+import {isEmpty} from 'ramda'
 import StepCreator from './StepCreator'
 import bookmarkletFromCode from './bookmarklet/bookmarkletFromCode'
 
@@ -24,24 +25,40 @@ class Editor extends Component {
     return bookmarkletFromCode(replayCode)
   }
 
-  render () {
-    const renderedSteps = this.state.steps.map(step => {
+  render () {    
+
+    const renderedSteps = this.state.steps.map((step, stepIndex) => {
       return (
-        <div>
-          {automark.getStepDescription(step)}
-        </div>
+        <tr>
+          <td>{stepIndex + 1}</td>
+          <td>{automark.getStepDescription(step)}</td>
+        </tr>
       )
     })
-
     
     return (
       <div>
+        <h4>Create a step</h4>
         <StepCreator onAdd={this.onAddStep}/>
-        <div>
-            {renderedSteps}
-        </div>
-        <button onClick={this.replay}>Click on these elements</button>
-        <a href={this.bookmarklet()}>Bookmarklet</a>
+        <h4>Steps</h4>
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {isEmpty(renderedSteps) ? 
+              <tr>
+                <td></td>
+                <td>No Step</td>
+              </tr>
+              : renderedSteps}
+          </tbody>
+        </table>
+        <button onClick={this.replay}>Click to replay</button>
+        or use this <a href={this.bookmarklet()}>Bookmarklet</a>
       </div>
     )
   }

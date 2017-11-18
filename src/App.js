@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import './App.css';
 import Editor from './Editor'
 
 class App extends Component {
@@ -17,24 +16,26 @@ class App extends Component {
 
   render() {
     return (
-      <div className="App">
-        <div className="App-header">
-          <h2>Automark</h2>
-          <div>
+      <div>
+        <h1>Automark</h1>
+        <div className='row flex-top'>
+          <div className='col'>
+            <h2>Playground</h2>
             <div>
               Counter value is <b>{this.state.counter}</b> 
             </div>
             <div style={{margin: 5}}>
-              <button onClick={this.increment}>+</button>
-              <button onClick={this.decrement}>-</button>
+              <button className="btn-small" onClick={this.increment}>+</button>
+              <button className="btn-small" onClick={this.decrement}>-</button>
             </div>
             <div style={{margin: 5}}>
-              <input type='text' />
+              <input className="input-block" type='text' />
             </div>
           </div>
-        </div>
-        <div style={{margin: 5}}>
-          <Editor />
+          <div className='col col-fill'>
+            <h2>Editor</h2>
+            <Editor />
+          </div>
         </div>
       </div>
     );
