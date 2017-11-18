@@ -1,38 +1,49 @@
-/* globals EventTarget */
+/* globals EventTarget automark */
 
-if (!automark) {
-  console.log('[AUTOMARK]', 'Initializing...')
+initialize()
 
-  var automark = {}
-  automark.listeners = []
+function initialize () {
+  if (!window.automark) {
+    console.log('[AUTOMARK]', 'Initializing...')
 
-  automark.addEventListener = function (listener) {
-    var index = automark.listeners.indexOf(listener)
-    if (index > -1) {
-      console.log('[AUTOMARK][ERROR]', 'The listener to add is already present')
-    } else {
-      console.log('[AUTOMARK]', 'Add a listener')
-      automark.listeners.push(listener)
+    var automark = {}
+    window.automark = automark
+
+    automark.actions = []
+    automark.listeners = []
+
+    automark.addEventListener = function (listener) {
+      var index = automark.listeners.indexOf(listener)
+      if (index > -1) {
+        console.log('[AUTOMARK][ERROR]', 'The listener to add is already present')
+      } else {
+        console.log('[AUTOMARK]', 'Add a listener')
+        automark.listeners.push(listener)
+      }
     }
-  }
 
-  automark.removeEventListener = function (listener) {
-    var index = automark.listeners.indexOf(listener)
-    if (index > -1) {
-      automark.listeners.splice(index, 1)
-      console.log('[AUTOMARK]', 'Remove a listener')
-    } else {
-      console.log('[AUTOMARK][ERROR]', 'The listener to remove has not been found')
+    automark.removeEventListener = function (listener) {
+      var index = automark.listeners.indexOf(listener)
+      if (index > -1) {
+        automark.listeners.splice(index, 1)
+        console.log('[AUTOMARK]', 'Remove a listener')
+      } else {
+        console.log('[AUTOMARK][ERROR]', 'The listener to remove has not been found')
+      }
     }
+
+    automark.replaySteps = replayAutomarkSteps
+    automark.getStepDescription = getAutomarkStepDescription
+    automark.getDefinition = getAutomarkDefinition
+
+    console.log('[AUTOMARK]', 'Proxify document.addEventListener function')
+    proxifyAddEventListener(automarkProxy)
+
+    console.log('[AUTOMARK]', 'Add an event listener for every DOM event type')
+    listenAllDocumentEvents()
+
+    console.log('[AUTOMARK]', 'Initialized.')
   }
-
-  console.log('[AUTOMARK]', 'Proxify document.addEventListener function')
-  proxifyAddEventListener(automarkProxy)
-
-  console.log('[AUTOMARK]', 'Add an event listener for every DOM event type')
-  listenAllDocumentEvents()
-
-  console.log('[AUTOMARK]', 'Initialized.')
 }
 
 function automarkProxy (event) {
@@ -169,4 +180,29 @@ function getPathTo (element) {
       ix++
     }
   }
+}
+
+function replayAutomarkSteps (steps) {
+  steps.reduce((promise, step) => {
+    var action = automark.actions[step.type]
+    if (!action) return promise
+
+    return promise
+    .then(() => new Promise(resolve => setTimeout(resolve, 1000)))
+    .then(() => action.execute(step.params))
+  }, Promise.resolve())
+}
+
+function getAutomarkStepDescription (step) {
+  var action = automark.actions[step.type]
+  if (!action) return 'No action was found of type ' + step.type
+
+  return action.getDescription(step.params)
+}
+
+function getAutomarkDefinition (type) {
+  var action = automark.actions[type]
+  if (!action) return {}
+
+  return action.params
 }
