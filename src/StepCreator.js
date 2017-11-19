@@ -75,7 +75,13 @@ class StepCreator extends Component {
                     <div>
                         <b>type</b>
                         <select onChange={this.setActionType}>
-                            {keys(automark.actions).map(actionType => <option key={actionType} value={actionType}>{actionType}</option>)}
+                            {keys(automark.actions)
+                                .map(actionType => 
+                                    <option key={actionType} value={actionType}>
+                                        {actionType}
+                                    </option>
+                                )
+                            }
                         </select>
                     </div>
                     {renderParams(automark.getDefinition(this.state.type))}
