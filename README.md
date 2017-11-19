@@ -13,7 +13,9 @@
 - (DONE) Let user save its actions in a javascript bookmark
 - (DONE) Let user add a `setValue` action to set the value of the textfield
 - Consider showing the editor in a separate window, maybe using React portals ? https://hackernoon.com/using-a-react-16-portal-to-do-something-cool-2a2d627b0202
-
+- Let user add a `selectByVisibleText` action to select the value of the combobox
+- Make the editor show in front of the app
+- Embed the editor in a bookmarklet
 
 ## List of Webdriverio actions used in a real project
 
