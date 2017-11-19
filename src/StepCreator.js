@@ -41,7 +41,6 @@ class StepCreator extends Component {
     }
 
     render(){
-
         const renderParamEditor = (paramType, paramName) => {
             if(paramType === 'element'){
                 return <ElementParam onChange={this.setParam(paramName)} />

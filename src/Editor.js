@@ -30,38 +30,42 @@ class Editor extends Component {
 
     const renderedSteps = this.state.steps.map((step, stepIndex) => {
       return (
-        <tr>
+        <tr key={'step' + stepIndex}>
           <td>{stepIndex + 1}</td>
           <td>{automark.getStepDescription(step)}</td>
         </tr>
       )
     })
     
+    const editorWindowPortal = (
+      <WindowPortal>
+        <h4>Create a step</h4>
+        <StepCreator onAdd={this.onAddStep}/>
+        <h4>Steps</h4>
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {isEmpty(renderedSteps) ? 
+              <tr>
+                <td></td>
+                <td>No Step</td>
+              </tr>
+              : renderedSteps}
+          </tbody>
+        </table>
+        <button onClick={this.replay}>Click to replay</button>
+        or use this <a href={this.bookmarklet()}>Bookmarklet</a>
+      </WindowPortal>
+    )
+
     return (
       <div>
-        <WindowPortal>
-          <h4>Create a step</h4>
-          <StepCreator onAdd={this.onAddStep}/>
-          <h4>Steps</h4>
-          <table>
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {isEmpty(renderedSteps) ? 
-                <tr>
-                  <td></td>
-                  <td>No Step</td>
-                </tr>
-                : renderedSteps}
-            </tbody>
-          </table>
-          <button onClick={this.replay}>Click to replay</button>
-          or use this <a href={this.bookmarklet()}>Bookmarklet</a>
-        </WindowPortal>
+        {false && editorWindowPortal}        
         <h4>Create a step</h4>
         <StepCreator onAdd={this.onAddStep}/>
         <h4>Steps</h4>
