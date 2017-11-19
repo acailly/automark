@@ -17,30 +17,30 @@
 
 ## List of Webdriverio actions used in a real project
 
-addValue
-chooseFile
-clearElement
-click
-debug
-getElementSize
-getText
-getTitle
-getUrl
-getValue
-isSelected
-isVisible
-keys
-pause
-saveScreenshot
-setValue
-setViewportSize
-selectByValue
-selectByVisibleText
-url
-waitForVisible
-waitForExist
-waitUntil
-windowHandleMaximize
-windowHandleSize
+- addValue
+- chooseFile
+- clearElement
+- (DONE) click
+- debug
+- getElementSize
+- getText
+- getTitle
+- getUrl
+- getValue
+- isSelected
+- isVisible
+- keys
+- pause
+- saveScreenshot
+- (DONE) setValue
+- setViewportSize
+- selectByValue
+- selectByVisibleText
+- url
+- waitForVisible
+- waitForExist
+- waitUntil
+- windowHandleMaximize
+- windowHandleSize
 
 
