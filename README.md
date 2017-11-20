@@ -45,4 +45,10 @@
 - windowHandleMaximize
 - windowHandleSize
 
+## Source code of Marionette, browser automation API of Firefox
+
+https://dxr.mozilla.org/mozilla-central/source/testing/marionette
+
+
+
 
